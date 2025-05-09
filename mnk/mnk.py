@@ -2,34 +2,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 
-def Majewski_Tymoteusz_MNK(x: List, y: List, n: int) -> List:
+def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot = True) -> List:
     """
-    Aproksymacja średniokwadratowa metodą najmniejszych kwadratów
-    z użyciem rozkładu Cholesky'ego – własna implementacja + NumPy tylko do mnożenia macierzy.
+    Aproksymacja średniokwadratowa metodą najmniejszych kwadratów == rozwiązanie układu równań A^T * A * a = A^T * y
     """
+
+    if len(x) != len(y):
+        raise ValueError("Długości x i y muszą być równe.")
+    if n < 0:
+        raise ValueError("Stopień wielomianu musi być nieujemny.")
+    if n >= len(x):
+        raise ValueError("Stopień wielomianu musi być mniejszy od liczby punktów danych.")
+    
     x = np.array(x)
     y = np.array(y)
     m = len(x)
 
-    # Tworzenie macierzy A
+    # Budowa macierzy A - wypełnienie kolumn potęgami x
     A = []
     for i in range(m):
         row = [x[i]**j for j in range(n+1)]
         A.append(row)
 
-
     ATA = transpose(A) @ np.array(A)
     ATy = transpose(A) @ np.array(y)
 
-    # Rozkład Cholesky'ego (własny)
     L = cholesky_decomposition(ATA)
 
-    # Rozwiązanie układów
     z = forward_substitution(L, ATy)
     a = backward_substitution(transpose(L), z)
-
-    # Rysowanie wykresu
-    draw_plot(x, y, a)
+    if plot:
+        draw_plot(x, y, a)
 
     return a
 
@@ -98,18 +101,11 @@ def draw_plot(x_data, y_data, coeffs):
     xs = [x_min + i * (x_max - x_min) / 500 for i in range(501)]
     ys = [evaluate_polynomial(coeffs, x) for x in xs]
 
-    plt.scatter(x_data, y_data, color='red', label='Punkty dane')
-    plt.plot(xs, ys, color='blue', label='Wielomian aproksymacyjny')
+    plt.scatter(x_data, y_data, color='blue', label='Znane punkty')
+    plt.plot(xs, ys, color='grey', label='Wielomian aproksymacyjny')
     plt.xlabel("x")
     plt.ylabel("y")
     plt.title("Aproksymacja metodą najmniejszych kwadratów")
     plt.grid(True)
     plt.legend()
     plt.show()
-
-x = [0, 1, 2, 3, 4]
-y = [1, 2, 0.9, 3, 7]
-n = 1
-
-a = Majewski_Tymoteusz_MNK(x, y, n)
-print("Współczynniki wielomianu:", a)
