@@ -27,7 +27,7 @@ def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot=True) -> List:
     y = np.array(y)
     m = len(x)
 
-    # Budowa macierzy A - wypełnienie kolumn potęgami x
+    # Budowa macierzy A, gdzie kolumny to kolejne potęgi x
     A = []
     for i in range(m):
         row = [x[i]**j for j in range(n+1)]
@@ -140,3 +140,14 @@ def draw_plot(x_data, y_data, coeffs):
     plt.grid(True)
     plt.legend()
     plt.show()
+
+def main():
+    x = [1, 2, 3, 4, 5]
+    y = [2.2, 2.8, 3.6, 4.5, 5.1]
+    n = 4
+
+    coeffs = Majewski_Tymoteusz_MNK(x, y, n)
+    print("Współczynniki wielomianu:", coeffs)
+
+if __name__ == "__main__":
+    main()
