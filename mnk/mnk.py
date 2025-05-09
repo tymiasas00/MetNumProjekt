@@ -2,9 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 
-def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot = True) -> List:
+
+def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot=True) -> List:
     """
     Aproksymacja średniokwadratowa metodą najmniejszych kwadratów == rozwiązanie układu równań A^T * A * a = A^T * y
+
+    :param x: Lista punktów x
+    :param y: Lista punktów y
+    :param n: Stopień wielomianu
+    :param plot: Czy rysować wykres?
+
+    :returns: Lista współczynników wielomianu
     """
 
     if len(x) != len(y):
@@ -12,8 +20,9 @@ def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot = True) -> List:
     if n < 0:
         raise ValueError("Stopień wielomianu musi być nieujemny.")
     if n >= len(x):
-        raise ValueError("Stopień wielomianu musi być mniejszy od liczby punktów danych.")
-    
+        raise ValueError(
+            "Stopień wielomianu musi być mniejszy od liczby punktów danych.")
+
     x = np.array(x)
     y = np.array(y)
     m = len(x)
@@ -40,6 +49,9 @@ def Majewski_Tymoteusz_MNK(x: List, y: List, n: int, plot = True) -> List:
 def cholesky_decomposition(A):
     """
     Rozkład Cholesky'ego macierzy A na L * L^T, gdzie L jest macierzą dolnotrójkątną.
+
+    :param A: Macierz do rozkładu
+    :returns: Macierz dolnotrójkątna L rozkładu Cholesky'ego
     """
     n = len(A)
     L = [[0.0 for _ in range(n)] for _ in range(n)]
@@ -57,6 +69,10 @@ def cholesky_decomposition(A):
 def forward_substitution(L, b):
     """
     Rozwiązanie układu równań L * y = b, gdzie L jest macierzą dolnotrójkątną.
+
+    :param L: Macierz dolnotrójkątna
+    :param b: Wektor prawej strony
+    :returns: Wektor y rozwiązania
     """
     n = len(b)
     x = [0.0 for _ in range(n)]
@@ -69,6 +85,10 @@ def forward_substitution(L, b):
 def backward_substitution(U, b):
     """
     Rozwiązanie układu równań U * x = b, gdzie U jest macierzą górnotrójkątną.
+
+    :param U: Macierz górnotrójkątna
+    :param b: Wektor prawej strony
+    :returns: Wektor x rozwiązania
     """
     n = len(b)
     x = [0.0 for _ in range(n)]
@@ -81,6 +101,9 @@ def backward_substitution(U, b):
 def transpose(M):
     """
     Transpozycja macierzy M.
+
+    :param M: Macierz do transpozycji
+    :returns: Transponowana macierz
     """
     return [[M[j][i] for j in range(len(M))] for i in range(len(M[0]))]
 
@@ -88,6 +111,10 @@ def transpose(M):
 def evaluate_polynomial(coeffs, x):
     """
     Oblicza wartość wielomianu o współczynnikach coeffs w punkcie x.
+
+    :param coeffs: Lista współczynników wielomianu
+    :param x: Punkt, w którym obliczamy wartość wielomianu
+    :returns: Wartość wielomianu w punkcie x
     """
     return sum(coeffs[i] * x**i for i in range(len(coeffs)))
 
@@ -95,6 +122,10 @@ def evaluate_polynomial(coeffs, x):
 def draw_plot(x_data, y_data, coeffs):
     """
     Rysuje wykres punktów danych oraz wykres wielomianu aproksymacyjnego.
+    
+    :param x_data: Lista punktów x
+    :param y_data: Lista punktów y
+    :param coeffs: Lista współczynników wielomianu    
     """
     x_min = min(x_data)
     x_max = max(x_data)
